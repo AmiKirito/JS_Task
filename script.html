@@ -1,0 +1,37 @@
+<script>
+
+function SortRoles(array){
+
+    var distribRoles = array.split(",");
+    distribRoles.forEach(element => {
+        let temp = "";
+        for(var i = 0; i <= element.length; i++)
+        {
+            if(element[i] == " " || element[i] == undefined){
+                if(element[i+1] != " " && element[i+2] != " " && element[i+1] != undefined && i != 0 && temp != "")
+                    temp+=element[i];
+            }
+            else{
+                temp+=element[i];
+            }
+        }
+        distribRoles[distribRoles.indexOf(element)] = temp;
+    });
+    return distribRoles;
+}
+
+alert("Hello User!");
+
+var roles = prompt("Please enter the roles separated by comma: ");
+
+roles =  SortRoles(roles);
+
+roles.forEach(element => {
+    alert(element);
+});
+
+var textLines = prompt("Please enter the text lines: ");
+
+
+</script>
+
