@@ -1,11 +1,13 @@
-<script>
+<meta charset="URF-8">
+<meta lang="ru">
+ <script>
 
-function SortRoles(array){
+function FormatRoles(roles){
 
-    var distribRoles = array.split(",");
+    let distribRoles = roles.split(",");
     distribRoles.forEach(element => {
         let temp = "";
-        for(var i = 0; i <= element.length; i++)
+        for(let i = 0; i <= element.length; i++)
         {
             if(element[i] == " " || element[i] == undefined){
                 if(element[i+1] != " " && element[i+2] != " " && element[i+1] != undefined && i != 0 && temp != "")
@@ -19,19 +21,94 @@ function SortRoles(array){
     });
     return distribRoles;
 }
+function numberAs(a,b) {
+  return a-b;
+}
+function FormatText(text, roles){
+    var changeText = text;
+    var rolesIndexes = [];
+
+    for(let i = 0; i < roles.length; i++)
+    {
+        var partRoleIndexes = {
+            Role: roles[i],
+            Indexes: [],
+            SubstrCount: 0,
+            RightIndexes: []
+        }
+        
+        let lastIndex = 0;
+
+        while(lastIndex != -1)
+        {
+            lastIndex = changeText.indexOf(roles[i], lastIndex);
+
+            if(lastIndex != -1){
+                partRoleIndexes.Indexes.push(lastIndex);                
+                partRoleIndexes.SubstrCount++;
+                lastIndex += roles[i].length;
+            }
+        }
+        rolesIndexes.push(partRoleIndexes);
+    }
+    
+    let allIndexes = [];
+
+    for(let i = 0; i < rolesIndexes.length; i++)
+    {
+        for(let j = 0; j < rolesIndexes[i].Indexes.length; j++)
+        {
+            allIndexes.push(rolesIndexes[i].Indexes[j]);
+        }
+    }    
+    allIndexes.sort(numberAs);
+
+    debugger;
+    for(let i = 0; i < rolesIndexes.length; i++)
+    {
+        for(let j = 0; j < rolesIndexes[i].Indexes.length; j++)
+        {
+            var indexPos = {
+            start: 0,
+            end: 0
+            }
+            indexPos.start = rolesIndexes[i].Indexes[j];
+            
+            if(rolesIndexes[i].Indexes.length == 1)
+            {
+                indexPos.end = changeText.length;
+            }
+
+            for(let k = 0; k < allIndexes.length ; k++)
+            {
+                if(allIndexes[k] > rolesIndexes[i].Indexes[j])
+                {
+                    indexPos.end = allIndexes[k];
+                    break;
+                }
+            }
+            rolesIndexes[i].RightIndexes.push(indexPos);
+        }
+    }
+}
 
 alert("Hello User!");
 
 var roles = prompt("Please enter the roles separated by comma: ");
+roles =  FormatRoles(roles);
 
-roles =  SortRoles(roles);
 
+/*
 roles.forEach(element => {
     alert(element);
 });
+*/
+
+// var anotherRoles = ["Городничий", "Аммос Федорович", "Артемий Филиппович", "Лука Лукич"]
+//Городничий, Аммос Федорович, Артемий Филиппович, Лука Лукич
 
 var textLines = prompt("Please enter the text lines: ");
-
+var newText = FormatText(textLines, roles);
 
 </script>
 
