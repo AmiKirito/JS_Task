@@ -75,7 +75,8 @@ function FormatText(text, roles){
             var counter = 0;
             var indexPos = {
             start: 0,
-            end: 0
+            end: 0,
+            pos: 0
             }
             indexPos.start = rolesIndexes[i].Indexes[j];
             
@@ -93,8 +94,8 @@ function FormatText(text, roles){
                 }
                 counter++;
             }
+            indexPos.pos = counter;
             rolesIndexes[i].RightIndexes.push(indexPos);
-            indexesArr.push(counter);
         }
     } 
     debugger;
@@ -126,7 +127,6 @@ roles =  FormatRoles(roles);
 
 var textLines = prompt("Please enter the text lines: ");
 var formatedTextRoles = FormatText(textLines, roles);
-var count = 0;
 
 document.write("<h1>", "Роли: ", "</h1>");
 
@@ -141,10 +141,10 @@ document.write("<h1>", "Вывод: \n", "</h1>");
 for(let i = 0; i < formatedTextRoles.length; i++)
 {
     document.write("<h3>", formatedTextRoles[i].Role, ": ", "</h3>");
-    for(let k = 0; k < formatedTextRoles[i].Replicas.length; k++, count++)
+    for(let k = 0; k < formatedTextRoles[i].Replicas.length; k++)
     {
         let cutSize = formatedTextRoles[i].Role.length + 2; 
-        document.write("<h3>", count,")",formatedTextRoles[i].Replicas[k].text.substring(cutSize, formatedTextRoles[i].Replicas[k].text.length) ,"</h3>");
+        document.write("<h3>", formatedTextRoles[i].RightIndexes[k].pos,")",formatedTextRoles[i].Replicas[k].text.substring(cutSize, formatedTextRoles[i].Replicas[k].text.length) ,"</h3>");
     }
 }
 </script>
