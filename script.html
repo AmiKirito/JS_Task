@@ -54,6 +54,7 @@ function FormatText(text, roles){
 
         rolesIndexes.push(partRoleIndexes);
     }
+     
 
     let allIndexes = [];
 
@@ -65,10 +66,13 @@ function FormatText(text, roles){
 
     allIndexes.sort(numberAs);
 
+    var indexesArr = [];
+
     for(let i = 0; i < rolesIndexes.length; i++)
     {
         for(let j = 0; j < rolesIndexes[i].Indexes.length; j++)
         {
+            var counter = 0;
             var indexPos = {
             start: 0,
             end: 0
@@ -87,11 +91,13 @@ function FormatText(text, roles){
                     indexPos.end = allIndexes[k];
                     break;
                 }
+                counter++;
             }
             rolesIndexes[i].RightIndexes.push(indexPos);
+            indexesArr.push(counter);
         }
     } 
-    
+    debugger;
     for(let i = 0; i < rolesIndexes.length; i++)
     {
         for(let j = 0; j < rolesIndexes[i].RightIndexes.length; j++)
@@ -104,6 +110,7 @@ function FormatText(text, roles){
             rolesIndexes[i].Replicas.push(replica);
         }
     }
+
     
     return rolesIndexes;
 }
@@ -119,7 +126,7 @@ roles =  FormatRoles(roles);
 
 var textLines = prompt("Please enter the text lines: ");
 var formatedTextRoles = FormatText(textLines, roles);
-var count = 1;
+var count = 0;
 
 document.write("<h1>", "Роли: ", "</h1>");
 
