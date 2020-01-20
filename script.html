@@ -1,14 +1,13 @@
 <meta charset="URF-8">
 <meta lang="ru">
- <script>
-
+<script>
 function FormatRoles(roles){
 
     let distribRoles = roles.split(",");
+
     distribRoles.forEach(element => {
         let temp = "";
-        for(let i = 0; i <= element.length; i++)
-        {
+        for(let i = 0; i <= element.length; i++){
             if(element[i] == " " || element[i] == undefined){
                 if(element[i+1] != " " && element[i+2] != " " && element[i+1] != undefined && i != 0 && temp != "")
                     temp+=element[i];
@@ -17,53 +16,55 @@ function FormatRoles(roles){
                 temp+=element[i];
             }
         }
+
         distribRoles[distribRoles.indexOf(element)] = temp;
+
     });
+
     return distribRoles;
 }
-function numberAs(a,b) {
+
+function numberAs(a,b){
   return a-b;
 }
+
 function FormatText(text, roles){
     var changeText = text;
     var rolesIndexes = [];
 
-    for(let i = 0; i < roles.length; i++)
-    {
+    for(let i = 0; i < roles.length; i++){
+
         var partRoleIndexes = {
             Role: roles[i],
             Indexes: [],
             SubstrCount: 0,
-            RightIndexes: []
+            RightIndexes: [],
+            Replicas: []
         }
-        
         let lastIndex = 0;
 
-        while(lastIndex != -1)
-        {
+        while(lastIndex != -1){
             lastIndex = changeText.indexOf(roles[i], lastIndex);
-
             if(lastIndex != -1){
                 partRoleIndexes.Indexes.push(lastIndex);                
                 partRoleIndexes.SubstrCount++;
                 lastIndex += roles[i].length;
             }
         }
+
         rolesIndexes.push(partRoleIndexes);
     }
-    
+
     let allIndexes = [];
 
-    for(let i = 0; i < rolesIndexes.length; i++)
-    {
-        for(let j = 0; j < rolesIndexes[i].Indexes.length; j++)
-        {
+    for(let i = 0; i < rolesIndexes.length; i++){
+        for(let j = 0; j < rolesIndexes[i].Indexes.length; j++){
             allIndexes.push(rolesIndexes[i].Indexes[j]);
         }
     }    
+
     allIndexes.sort(numberAs);
 
-    debugger;
     for(let i = 0; i < rolesIndexes.length; i++)
     {
         for(let j = 0; j < rolesIndexes[i].Indexes.length; j++)
@@ -89,26 +90,55 @@ function FormatText(text, roles){
             }
             rolesIndexes[i].RightIndexes.push(indexPos);
         }
+    } 
+    
+    for(let i = 0; i < rolesIndexes.length; i++)
+    {
+        for(let j = 0; j < rolesIndexes[i].RightIndexes.length; j++)
+        {
+            let replica = {
+                text: ""
+            }
+
+            replica.text = changeText.substring(rolesIndexes[i].RightIndexes[j].start, rolesIndexes[i].RightIndexes[j].end);
+            rolesIndexes[i].Replicas.push(replica);
+        }
     }
+    
+    return rolesIndexes;
 }
 
 alert("Hello User!");
 
 var roles = prompt("Please enter the roles separated by comma: ");
 roles =  FormatRoles(roles);
-
-
 /*
-roles.forEach(element => {
-    alert(element);
-});
+Городничий, Аммос Федорович, Артемий Филиппович, Лука Лукич
+Городничий: Я пригласил вас, господа, с тем, чтобы сообщить вам пренеприятное известие: к нам едет ревизор. Аммос Федорович: Как ревизор? Артемий Филиппович: Как ревизор? Городничий: Ревизор из Петербурга, инкогнито. И еще с секретным предписаньем. Аммос Федорович: Вот те на! Артемий Филиппович: Вот не было заботы, так подай! Лука Лукич: Господи боже! еще и с секретным предписаньем!
 */
 
-// var anotherRoles = ["Городничий", "Аммос Федорович", "Артемий Филиппович", "Лука Лукич"]
-//Городничий, Аммос Федорович, Артемий Филиппович, Лука Лукич
-
 var textLines = prompt("Please enter the text lines: ");
-var newText = FormatText(textLines, roles);
+var formatedTextRoles = FormatText(textLines, roles);
+var count = 1;
 
+document.write("<h1>", "Роли: ", "</h1>");
+
+document.write("<h3>", roles), "</h3>";
+
+document.write("<h1>", "Текст: ", "</h1>");
+
+document.write("<h3>", textLines), "</h3>";
+
+document.write("<h1>", "Вывод: \n", "</h1>");
+
+for(let i = 0; i < formatedTextRoles.length; i++)
+{
+    document.write("<h3>", formatedTextRoles[i].Role, ": ", "</h3>");
+    for(let k = 0; k < formatedTextRoles[i].Replicas.length; k++, count++)
+    {
+        let cutSize = formatedTextRoles[i].Role.length + 2; 
+        document.write("<h3>", count,")",formatedTextRoles[i].Replicas[k].text.substring(cutSize, formatedTextRoles[i].Replicas[k].text.length) ,"</h3>");
+    }
+}
 </script>
 
